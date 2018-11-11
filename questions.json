@@ -1,0 +1,31 @@
+{
+  "title": "Test about paint",
+  "questions": [
+    {
+      "text": "Red paint is red",
+      "type": "tf",
+      "answer": "t"
+    },
+    {
+      "text": "Red paint is blue",
+      "type": "tf",
+      "answer": "f"
+    },
+    {
+      "text": "What color is green paint?",
+      "type": "mc",
+      "answer": "Green",
+      "wrong": [
+        "Red",
+        "Blue",
+        "Yellow"
+      ]
+    },
+    {
+      "text": "Look at the following label on the bucket, what color is this paint?",
+      "type": "input",
+      "answer": "yellow",
+      "snippet": "This bucket contains yellow paint"
+    }
+  ]
+}
