@@ -1,104 +1,129 @@
 Vue.component('questions', {
     template: `
-<div>
-  <div v-if="introStage">
-    <h1>Welcome to the Quiz: {{title}}</h1>
-    <p>
-      Some kind of text here. Blah blah.
-    </p>
+  
+  <div>
+  <div v-if="showingResults" class="jumbotron jumbotron-fluid results">
+        <div class="container">
+            <h1 class="display-4">Results</h1>
+            <p class="lead">You got {{ amountOfQuestionsCorrect.length }} out of {{ amountOfQuestions }} correct!</p>
+        </div>
+    </div>
+      
+    <div class="container questions">
+        <question
+            v-for="(question, index) in questions"
+            :key="index"
+            :question-id="index + 1"
+            :question="question"
+            :showingResults="showingResults"
+        />
+    </div>
     
-    <button @click="startQuiz">START!</button>
+    <div class="container">
+      <div class="row">
+        <div class="col-12 text-center button">
+          <button class="btn btn-lg btn--show-result" @click='showResultButton()' v-if="!showingResults">Show results</button>
+        </div>
+      </div>
+    </div>    
   </div>
-  
-  <div v-if="questionStage">
-    <question 
-              :question="questions[currentQuestion]"
-              v-on:answer="handleAnswer"
-              :question-number="currentQuestion+1"
-    ></question>
-  </div>
-  
-  <div v-if="resultsStage">
-    You got {{correct}} right out of {{questions.length}} questions. Your percentage is {{perc}}%.
-  </div>
-</div>
+
 `,
     data() {
         return {
-            introStage: false,
-            questionStage: false,
-            resultsStage: false,
-            title: '',
             questions: [],
-            currentQuestion: 0,
-            answers: [],
-            correct: 0,
-            perc: null
+            showingResults: false
         }
     },
     created() {
         fetch('questions.json')
             .then(res => res.json())
             .then(res => {
-                this.title = res.title;
-                this.questions = res.questions;
-                this.introStage = true;
-            })
 
+                res.questions.map(function (v) {
+                    v.correct = false
+                })
+
+                this.questions = _.shuffle(res.questions);
+            })
     },
-    methods: {
-        startQuiz() {
-            this.introStage = false;
-            this.questionStage = true;
-            console.log('test' + JSON.stringify(this.questions[this.currentQuestion]));
-        },
-        handleAnswer(e) {
-            console.log('answer event ftw', e);
-            this.answers[this.currentQuestion] = e.answer;
-            if ((this.currentQuestion + 1) === this.questions.length) {
-                this.handleResults();
-                this.questionStage = false;
-                this.resultsStage = true;
-            } else {
-                this.currentQuestion++;
+    computed:
+        {
+            amountOfQuestions: function(){
+                return this.questions.length;
+            },
+            amountOfQuestionsCorrect(){
+                return this.questions.filter(this.isCorrect);
             }
         },
-        handleResults() {
-            console.log('handle results');
-            this.questions.forEach((a, index) => {
-                if (this.answers[index] === a.answer) this.correct++;
-            });
-            this.perc = ((this.correct / this.questions.length) * 100).toFixed(2);
-            console.log(this.correct + ' ' + this.perc);
-        }
+    methods: {
+        showResultButton() {
+            this.showingResults = true;
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
+        },
+        isCorrect(questions) {
+            return questions.correct;
+        },
     }
 
 });
 
 Vue.component('question', {
     template: `
-<div>
-  <strong>Question {{ questionNumber }}:</strong><br/>
-  <strong>{{ question.text }} </strong>
-
-  <div v-if="question.type === 'tf'">
-    <input type="radio" name="currentQuestion" id="trueAnswer" v-model="answer" value="t"><label for="trueAnswer">True</label><br/>
-    <input type="radio" name="currentQuestion" id="falseAnswer" v-model="answer" value="f"><label for="falseAnswer">False</label><br/>
-  </div>
-
-  <div v-if="question.type === 'mc'">
-    <div v-for="(mcanswer,index) in question.answers">
-    <input type="radio" :id="'answer'+index" name="currentQuestion" v-model="answer" :value="mcanswer"><label :for="'answer'+index">{{mcanswer}}</label><br/>
+<div class="row question" v-bind:class="[questionId % 2 == 0 ? 'odd' : 'even']"> 
+    <div class="col-12 col-md-2 no">
+        Question {{ questionId }}
     </div>
-  </div>
-  
-  <div v-if="question.type === 'input'">
-    <div v-for="(mcanswer,index) in question.answers">
-    <input type="radio" :id="'answer'+index" name="currentQuestion" v-model="answer" :value="mcanswer"><label :for="'answer'+index">{{mcanswer}}</label><br/>
+    <div class="col-12 col-md-10">
+    
+        <div>
+            
+            <p>{{ question.text }}</p>
+            
+            <p v-if="question.snippet">
+                <code>{{ question.snippet }}</code>
+            </p>
+            
+        </div>
+        
+        <div v-if="!showingResults">
+            <div v-if="question.type === 'mc'" class="form-group">
+                <div v-for="(mcanswer,index) in shuffledMcQuestions" class="form-check">
+                    <input class="form-input" type="radio" :id="'answer'+index" v-model="answer" :value="mcanswer" @change="submitAnswer"> <label :for="'answer'+index">{{mcanswer}}</label><br/>
+                </div>
+            </div>
+            
+            <ul v-if="question.type === 'tf'" class="list-group">
+                <div class="form-check"><input type="radio" :id="'t' + questionId" v-model="answer" value="t" @change="submitAnswer"> <label :for="'t' + questionId">True</label></div>
+                <div class="form-check"><input type="radio" :id="'f' + questionId" v-model="answer" value="f" @change="submitAnswer"> <label :for="'f' + questionId">False</label></div>
+            </ul>
+            
+            <p v-if="question.type === 'input'">
+                <input type="input" v-model="answer" @change="submitAnswer"> 
+            </p>
+        </div>
+        
+    <div v-if="showingResults" class="col-12">
+    
+        <div class="alert" v-bind:class="[answerIsCorrect ? 'alert-success' : 'alert-danger']" role="alert">
+          <h4 class="alert-heading" v-if="answerIsCorrect">Well done!</h4>
+          <h4 class="alert-heading" v-else>Oops..</h4>
+          <p class="mb-0">You answered: <strong>{{ answer }}</strong></p>
+          <p class="mb-0">The answer is: <strong>{{ question.answer }}</strong></p>
+          <div v-if="question.explanation">
+          <hr>
+          <p>{{ question.explanation }}</p>
+          </div>
+        </div>
     </div>
-  </div>
+        
+        
+    
+    </div>
+    
 
-  <button @click="submitAnswer">Answer</button>
+    
 </div>
 `,
     data() {
@@ -106,18 +131,26 @@ Vue.component('question', {
             answer: ''
         }
     },
-    props: ['question', 'question-number'],
     methods: {
         submitAnswer: function () {
-            this.$emit('answer', {answer: this.answer});
-            this.answer = null;
+            this.question.correct = this.answerIsCorrect
         }
-    }
+    },
+    computed: {
+        answerIsCorrect: function () {
+            return this.answer === this.question.answer
+        },
+        shuffledMcQuestions:  function () {
+            return _.shuffle(this.question.wrong.concat(this.question.answer))
+        }
+    },
+    props: ['question', 'questionId', 'showingResults']
 });
 
 const app = new Vue({
     el: '#root',
     data() {
         return {}
+
     }
 })

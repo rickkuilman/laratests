@@ -22,26 +22,47 @@
         color :#f3f3f3;
     }
     .jumbotron {
+        margin:0;
+    }
+    .hello {
+        background: #f4645f;
+        color: #f3f3f3;
+    }
+    .results {
+        background: #3A8F93;
+        color: #f3f3f3;
+    }
+    .questions {
+        margin-top: 2em;
+        border: 1px solid #f3f3f3;
+    }
+    .question {
+        padding: 1em;
+    }
+    .even {
+        background: #f3f3f3;
+    }
+    .btn--show-result {
+        margin:1em;
         background: #f4645f;
         color: #f3f3f3;
     }
 </style>
 
 <div id="root">
-    <div class="jumbotron">
+    <div class="jumbotron jumbotron-fluid hello">
         <div class="container">
             <h1 class="display-4">Laratests</h1>
             <p class="lead">Test your knowledge of the Laravel framework!</p>
         </div>
     </div>
-
-    <div class="container">
+    <div>
         <questions></questions>
     </div>
 
 </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.11/lodash.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-    <script src="main2.js"></script>
+    <script src="main.js"></script>
 </body>
 </html>
