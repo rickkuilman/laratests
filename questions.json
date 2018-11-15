@@ -2,6 +2,16 @@
   "title": "Test about paint",
   "questions": [
     {
+      "text": "What can you not generate using the artisan command `make:model`?",
+      "type": "mc",
+      "answer": "A seeder",
+      "wrong": [
+        "A migration",
+        "A factory",
+        "A resource controller"
+      ]
+    },
+    {
       "text": "Red paint is red",
       "type": "tf",
       "answer": "t"
