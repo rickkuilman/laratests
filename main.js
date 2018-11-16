@@ -90,7 +90,7 @@ Vue.component('question', {
         <div v-if="!showingResults">
             <div v-if="question.type === 'mc'" class="form-group">
                 <div v-for="(mcanswer,index) in shuffledMcQuestions" class="form-check">
-                    <input class="form-input" type="radio" :id="'answer'+index" v-model="answer" :value="mcanswer" @change="submitAnswer"> <label :for="'answer'+index">{{mcanswer}}</label><br/>
+                    <input class="form-input" type="radio" :id="questionId + index" v-model="answer" :value="mcanswer" @change="submitAnswer"> <label :for="questionId + index">{{mcanswer}}</label><br/>
                 </div>
             </div>
             
