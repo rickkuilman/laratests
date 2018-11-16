@@ -79,7 +79,7 @@ Vue.component('question', {
     
         <div>
             
-            <p>{{ question.text }}</p>
+            <p v-html="formattedQuestion" />
             
             <p v-if="question.snippet">
                 <code>{{ question.snippet }}</code>
@@ -137,6 +137,9 @@ Vue.component('question', {
         }
     },
     computed: {
+        formattedQuestion: function (){
+            return this.question.text.replace(/`(.*?)`/g, "<code>\$1</code>")
+        },
         answerIsCorrect: function () {
             return this.answer === this.question.answer
         },
