@@ -1,0 +1,28 @@
+{
+  "lottery": {
+    "title": "The Lottery Ticket",
+    "author": "Anton C.",
+    "date": "2013-03-15 15:00",
+    "template": "article.jade",
+    "tags": [
+      "Fiction",
+      "Russian"
+    ],
+    "preview": "Ivan Dmitritch, a middle-class man who lived with his family on an income of twelve hundred a year …",
+    "iso8601Date": "2013-03-15T15:00:00+00:00",
+    "basename": "lottery"
+  },
+  "lottery2": {
+    "title": "The Lottery Ticket2",
+    "author": "Anton C.2",
+    "date": "2013-03-15 15:00",
+    "template": "article.jade2",
+    "tags": [
+      "Fiction2",
+      "Russian2"
+    ],
+    "preview": "Ivan Dmitritch, a middle-class man who lived with his family on an income of twelve hundred a year …",
+    "iso8601Date": "2013-03-15T15:00:00+00:00",
+    "basename": "lottery2"
+  }
+}
