@@ -1,5 +1,5 @@
 {
-  "title": "Test about paint",
+  "title": "Test about Laravel",
   "questions": [
     {
       "text": "What can you not generate using the artisan command `make:model`?",
@@ -12,30 +12,25 @@
       ]
     },
     {
-      "text": "Red paint is red",
+      "text": "What query will not return a Collection with 10 elements?",
+      "type": "mc",
+      "answer": "User::all()->limit(10)",
+      "wrong": [
+        "User::all()->take(10)",
+        "User::take(10)->get()",
+        "User::paginate(10)"
+      ]
+    },
+    {
+      "text": "`Product::all()` and `Product::get()` will both return the same result",
       "type": "tf",
       "answer": "t"
     },
     {
-      "text": "Red paint is blue",
-      "type": "tf",
-      "answer": "f"
-    },
-    {
-      "text": "What color is green paint?",
-      "type": "mc",
-      "answer": "Green",
-      "wrong": [
-        "Red",
-        "Blue",
-        "Yellow"
-      ]
-    },
-    {
-      "text": "Look at the following label on the bucket, what color is this paint?",
+      "text": "What method should be used to only retrieve the first 5 results?",
       "type": "input",
-      "answer": "yellow",
-      "snippet": "This bucket contains yellow paint"
+      "answer": "limit",
+      "snippet": "$users = DB::table('attachments')->???(5)->get();"
     }
   ]
 }
