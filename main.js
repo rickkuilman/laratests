@@ -79,7 +79,7 @@ Vue.component('question', {
     
         <div>
             
-            <p v-html="formattedQuestion" />
+            <p :inner-html.prop="question.text | formatCode" />
             
             <p v-if="question.snippet">
                 <code>{{ question.snippet }}</code>
@@ -90,7 +90,7 @@ Vue.component('question', {
         <div v-if="!showingResults">
             <div v-if="question.type === 'mc'" class="form-group">
                 <div v-for="(mcanswer,index) in shuffledMcQuestions" class="form-check">
-                    <input class="form-input" type="radio" :id="questionId + index" v-model="answer" :value="mcanswer" @change="submitAnswer"> <label :for="questionId + index">{{mcanswer}}</label><br/>
+                    <input class="form-input" type="radio" :id="String(questionId) + String(index)" v-model="answer" :value="mcanswer" @change="submitAnswer"> <label :for="questionId + index" :inner-html.prop="mcanswer | formatCode"></label><br/>
                 </div>
             </div>
             
@@ -136,10 +136,12 @@ Vue.component('question', {
             this.question.correct = this.answerIsCorrect
         }
     },
+    filters: {
+        formatCode: function(text) {
+            return text.replace(/`(.*?)`/g, "<code>\$1</code>");
+        }
+    },
     computed: {
-        formattedQuestion: function (){
-            return this.question.text.replace(/`(.*?)`/g, "<code>\$1</code>")
-        },
         answerIsCorrect: function () {
             return this.answer === this.question.answer
         },
