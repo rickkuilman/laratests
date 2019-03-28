@@ -109,8 +109,8 @@ Vue.component('question', {
         <div class="alert" v-bind:class="[answerIsCorrect ? 'alert-success' : 'alert-danger']" role="alert">
           <h4 class="alert-heading" v-if="answerIsCorrect">Well done!</h4>
           <h4 class="alert-heading" v-else>Oops..</h4>
-          <p class="mb-0">You answered: <strong>{{ answer }}</strong></p>
-          <p class="mb-0">The answer is: <strong>{{ question.answer }}</strong></p>
+          <p class="mb-0">You answered: <strong :inner-html.prop="answer | formatCode"></strong></p>
+          <p class="mb-0">The answer is: <strong :inner-html.prop="question.answer | formatCode"></strong></p>
           <div v-if="question.explanation">
           <hr>
           <p>{{ question.explanation }}</p>
