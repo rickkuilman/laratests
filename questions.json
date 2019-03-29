@@ -12,9 +12,9 @@
       ]
     },
     {
-      "text": "What query will not return a Collection with 10 elements?",
+      "text": "What query will not return an instance that contains 10 elements?",
       "type": "mc",
-      "answer": "`User::all()->limit(10)`",
+      "answer": "`User::get(10)`",
       "wrong": [
         "`User::all()->take(10)`",
         "`User::take(10)->get()`",
